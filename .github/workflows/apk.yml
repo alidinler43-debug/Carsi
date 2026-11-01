@@ -11,9 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Projeyi aç
-        run: unzip -o android-project.zip -d build-src
+      - name: Projeyi aç (en son yüklenen zip)
+        run: |
+          ZIP=$(git -c core.quotepath=off log -1 --name-only --pretty=format: -- '*.zip' | grep -v '^$' | head -1)
+          echo "Derlenen dosya: $ZIP"
+          unzip -o "$ZIP" -d build-src
 
       - uses: actions/setup-java@v4
         with:
